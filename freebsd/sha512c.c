@@ -25,49 +25,13 @@
  * SUCH DAMAGE.
  */
 
+#include <sys/types.h>
+#include <stdint.h>
+#include <string.h>
+
 #include "sha512.h"
 #include "sha512t.h"
 #include "endian.h"
-
-#if BYTE_ORDER == BIG_ENDIAN
-
-/* Copy a vector of big-endian uint64_t into a vector of bytes */
-#define	be64enc_vect(dst, src, len)	\
-	memcpy((void *)dst, (const void *)src, (size_t)len)
-
-/* Copy a vector of bytes into a vector of big-endian uint64_t */
-#define	be64dec_vect(dst, src, len)	\
-	memcpy((void *)dst, (const void *)src, (size_t)len)
-
-#else /* BYTE_ORDER != BIG_ENDIAN */
-
-/*
- * Encode a length len/4 vector of (uint64_t) into a length len vector of
- * (unsigned char) in big-endian form.  Assumes len is a multiple of 8.
- */
-static void
-be64enc_vect(unsigned char *dst, const uint64_t *src, size_t len)
-{
-	size_t i;
-
-	for (i = 0; i < len / 8; i++)
-		be64enc(dst + i * 8, src[i]);
-}
-
-/*
- * Decode a big-endian length len vector of (unsigned char) into a length
- * len/4 vector of (uint64_t).  Assumes len is a multiple of 8.
- */
-static void
-be64dec_vect(uint64_t *dst, const unsigned char *src, size_t len)
-{
-	size_t i;
-
-	for (i = 0; i < len / 8; i++)
-		dst[i] = be64dec(src + i * 8);
-}
-
-#endif /* BYTE_ORDER != BIG_ENDIAN */
 
 /* SHA512 round constants. */
 static const uint64_t K[80] = {

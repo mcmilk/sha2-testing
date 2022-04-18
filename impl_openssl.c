@@ -66,3 +66,4 @@ const sha2_impl_ops_t sha512_openssl_impl = {
 	.digest_len = 64,
 	.name = "sha512-openssl"
 };
+

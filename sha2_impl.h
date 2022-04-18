@@ -41,6 +41,9 @@ extern const sha2_impl_ops_t sha512_cifra_impl;
 extern const sha2_impl_ops_t sha256_openssl_impl;
 extern const sha2_impl_ops_t sha512_openssl_impl;
 
+extern const sha2_impl_ops_t sha256_lzma_impl;
+extern const sha2_impl_ops_t sha256_ltc_impl;
+
 extern const sha2_impl_ops_t sha256_sbase_impl;
 extern const sha2_impl_ops_t sha512_sbase_impl;
 extern const sha2_impl_ops_t sha512_256_sbase_impl;
@@ -50,6 +53,9 @@ extern const sha2_impl_ops_t sha512_bsd_impl;
 extern const sha2_impl_ops_t sha512_256_bsd_impl;
 
 extern const sha2_impl_ops_t sha256_cppcrypto_impl;
+#if defined(__x86_64)
+extern const sha2_impl_ops_t sha256_cppcrypto_shani_impl;
+#endif
 extern const sha2_impl_ops_t sha512_cppcrypto_impl;
 extern const sha2_impl_ops_t sha512_256_cppcrypto_impl;
 

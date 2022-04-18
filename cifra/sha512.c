@@ -112,7 +112,8 @@ static void sha512_update_block(void *vctx, const uint8_t *inp)
            h = ctx->H[7],
            Wt;
 
-  for (size_t t = 0; t < 80; t++)
+  size_t t;
+  for (t = 0; t < 80; t++)
   {
     if (t < 16)
     {
@@ -213,7 +214,7 @@ void cf_sha512_digest_final(cf_sha512_context *ctx, uint8_t hash[CF_SHA512_HASHS
   write64_be(ctx->H[5], hash + 40);
   write64_be(ctx->H[6], hash + 48);
   write64_be(ctx->H[7], hash + 56);
-  //memset(ctx, 0, sizeof *ctx);
+  memset(ctx, 0, sizeof *ctx);
 }
 
 void cf_sha384_digest(const cf_sha512_context *ctx, uint8_t hash[CF_SHA384_HASHSZ])

@@ -25,8 +25,9 @@ static int sbase_SHA256_Update(void *ctx, const void *data, size_t len)
 
 static int sbase_SHA256_Final(void *ctx, unsigned char *md)
 {
+	void *c = ctx;
 	sha256_sum(ctx, md);
-	free(ctx);
+	free(c);
 	return 0;
 }
 

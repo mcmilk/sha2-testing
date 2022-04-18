@@ -1,0 +1,3 @@
+*/*.o
+*.o
+sha2_tests.txt

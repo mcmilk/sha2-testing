@@ -24,48 +24,12 @@
  * SUCH DAMAGE.
  */
 
-#include "endian.h"
+#include <sys/types.h>
+#include <stdint.h>
+#include <string.h>
+
 #include "sha256.h"
-
-#if BYTE_ORDER == BIG_ENDIAN
-
-/* Copy a vector of big-endian uint32_t into a vector of bytes */
-#define	be32enc_vect(dst, src, len)	\
-	memcpy((void *)dst, (const void *)src, (size_t)len)
-
-/* Copy a vector of bytes into a vector of big-endian uint32_t */
-#define	be32dec_vect(dst, src, len)	\
-	memcpy((void *)dst, (const void *)src, (size_t)len)
-
-#else /* BYTE_ORDER != BIG_ENDIAN */
-
-/*
- * Encode a length len/4 vector of (uint32_t) into a length len vector of
- * (unsigned char) in big-endian form.  Assumes len is a multiple of 4.
- */
-static void
-be32enc_vect(unsigned char *dst, const uint32_t *src, size_t len)
-{
-	size_t i;
-
-	for (i = 0; i < len / 4; i++)
-		be32enc(dst + i * 4, src[i]);
-}
-
-/*
- * Decode a big-endian length len vector of (unsigned char) into a length
- * len/4 vector of (uint32_t).  Assumes len is a multiple of 4.
- */
-static void
-be32dec_vect(uint32_t *dst, const unsigned char *src, size_t len)
-{
-	size_t i;
-
-	for (i = 0; i < len / 4; i++)
-		dst[i] = be32dec(src + i * 4);
-}
-
-#endif /* BYTE_ORDER != BIG_ENDIAN */
+#include "endian.h"
 
 /* SHA256 round constants. */
 static const uint32_t K[64] = {

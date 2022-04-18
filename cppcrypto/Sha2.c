@@ -1,16 +1,22 @@
 
 /*
- * This code is based on public domain code within the cppcrypto-0.17 library.
- * Source: http://cppcrypto.sourceforge.net/
- * Author: kerukuro
+ * This code is based on public domain code by kerukuro (cppcrypto-0.17)
  *
- * Copyright (c) 2022 Tino Reichardt
+ * Copyright (c) 2022 Tino Reichardt <milky-zfs@mcmilk.de>
+ * Public domain with CC0 1.0.
  */
 
 #include <string.h>
-#include <byteswap.h>
 
 #include "Sha2.h"
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define cpu_to_be32(x) __builtin_bswap32(x)
+#define cpu_to_be64(x) __builtin_bswap64(x)
+#else
+#define cpu_to_be32(x) (x)
+#define cpu_to_be64(x) (x)
+#endif
 
 typedef void (*sha256_transform_f)(sha256_ctx * ctx, void *m,
 				   uint64_t num_blks);
@@ -98,7 +104,7 @@ void sha512_transform(sha512_ctx * ctx, void *mp, uint64_t num_blks)
 
 		for (i = 0; i < 128 / 8; i++) {
 			W[i] =
-			    bswap_64((((const uint64_t *)(mp))[blk * 16 + i]));
+			    cpu_to_be64((((const uint64_t *)(mp))[blk * 16 + i]));
 		}
 
 		a = ctx->hash[0];
@@ -168,11 +174,11 @@ void sha512_end(unsigned char *result, sha512_ctx * ctx)
 		pos = 0;
 	}
 	memset(m + pos, 0, (size_t)(128 - pos));
-	mlen = bswap_64(ctx->count[1]);
+	mlen = cpu_to_be64(ctx->count[1]);
 	memcpy(m + (128 - 8), &mlen, 64 / 8);
 	transfunc512(ctx, m, 1);
 	for (i = 0; i < 8; i++) {
-		ctx->hash[i] = bswap_64(ctx->hash[i]);
+		ctx->hash[i] = cpu_to_be64(ctx->hash[i]);
 	}
 	memcpy(result, ctx->hash, 64);
 }
@@ -247,7 +253,7 @@ void sha256_transform(sha256_ctx * ctx, void *mp, uint64_t num_blks)
 
 		for (i = 0; i < 64 / 4; i++) {
 			W[i] =
-			    bswap_32((((const uint32_t *)(mp))[blk * 16 + i]));
+			    cpu_to_be32((((const uint32_t *)(mp))[blk * 16 + i]));
 		}
 
 		a = ctx->hash[0];
@@ -319,12 +325,12 @@ void sha256_end(unsigned char *result, sha256_ctx * ctx)
 	}
 
 	memset(m + pos, 0, (size_t)(56 - pos));
-	mlen = bswap_64(ctx->count[1]);
+	mlen = cpu_to_be64(ctx->count[1]);
 	memcpy(m + (64 - 8), &mlen, 64 / 8);
 	transfunc256(ctx, m, 1);
 
 	for (i = 0; i < 8; i++) {
-		ctx->hash[i] = bswap_32(ctx->hash[i]);
+		ctx->hash[i] = cpu_to_be32(ctx->hash[i]);
 	}
 	memcpy(result, ctx->hash, 32);
 }
@@ -390,11 +396,11 @@ void sha512_256_end(unsigned char *result, sha512_ctx * ctx)
 		pos = 0;
 	}
 	memset(m + pos, 0, (size_t)(128 - pos));
-	mlen = bswap_64(ctx->count[1]);
+	mlen = cpu_to_be64(ctx->count[1]);
 	memcpy(m + (128 - 8), &mlen, 64 / 8);
 	transfunc512(ctx, m, 1);
 	for (i = 0; i < 4; i++) {
-		ctx->hash[i] = bswap_64(ctx->hash[i]);
+		ctx->hash[i] = cpu_to_be64(ctx->hash[i]);
 	}
 	memcpy(result, ctx->hash, 64);
 }

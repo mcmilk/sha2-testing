@@ -10,8 +10,8 @@ static int cifra_SHA256_Init(void **ctx)
 {
 	cf_sha256_context *c = malloc(sizeof(cf_sha256_context));
 	if (!c) exit(111);
-	cf_sha256_init(c);
 	*ctx = c;
+	cf_sha256_init(c);
 	return 0;
 }
 
@@ -26,6 +26,7 @@ static int cifra_SHA256_Final(void *ctx, unsigned char *md)
 {
 	cf_sha256_context *c = ctx;
 	cf_sha256_digest_final(c, md);
+	free(ctx);
 	return 0;
 }
 
@@ -41,8 +42,8 @@ static int cifra_SHA512_Init(void **ctx)
 {
 	cf_sha512_context *c = malloc(sizeof(cf_sha512_context));
 	if (!c) exit(111);
-	cf_sha512_init(c);
 	*ctx = c;
+	cf_sha512_init(c);
 	return 0;
 }
 
@@ -57,6 +58,7 @@ static int cifra_SHA512_Final(void *ctx, unsigned char *md)
 {
 	cf_sha512_context *c = ctx;
 	cf_sha512_digest_final(c, md);
+	free(ctx);
 	return 0;
 }
 

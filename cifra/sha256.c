@@ -89,7 +89,8 @@ static void sha256_update_block(void *vctx, const uint8_t *inp)
            h = ctx->H[7],
            Wt;
 
-  for (size_t t = 0; t < 64; t++)
+  size_t t;
+  for (t = 0; t < 64; t++)
   {
     /* For W[0..16] we process the input into W.
      * For W[16..64] we compute the next W value:
@@ -196,7 +197,7 @@ void cf_sha256_digest_final(cf_sha256_context *ctx, uint8_t hash[CF_SHA256_HASHS
   write32_be(ctx->H[6], hash + 24);
   write32_be(ctx->H[7], hash + 28);
   
-  //memset(ctx, 0, sizeof *ctx);
+  memset(ctx, 0, sizeof *ctx);
 }
 
 void cf_sha224_digest(const cf_sha256_context *ctx, uint8_t hash[CF_SHA224_HASHSZ])

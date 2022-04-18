@@ -103,7 +103,8 @@ static inline ticks getticks(void)
 typedef uint64_t cycles_t;
 static inline cycles_t get_cycles(void)
 {
-#error "Unknown platform!"
+//#warning "Unknown platform! XXX TODO"
+	return 0;
 }
 #endif
 

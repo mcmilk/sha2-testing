@@ -29,12 +29,8 @@
 #ifndef _SHA256_H_
 #define	_SHA256_H_
 
-#include <sys/cdefs.h>
 #include <sys/types.h>
-
-#include <strings.h>
 #include <stdint.h>
-#include <string.h>
 
 #define	SHA256_BLOCK_LENGTH		64
 #define	SHA256_DIGEST_LENGTH		32
@@ -46,10 +42,8 @@ typedef struct SHA256Context {
 	uint8_t buf[SHA256_BLOCK_LENGTH];
 } SHA256_CTX;
 
-__BEGIN_DECLS
 void	SHA256_Init(SHA256_CTX *);
 void	SHA256_Update(SHA256_CTX *, const void *, size_t);
 void	SHA256_Final(unsigned char [SHA256_DIGEST_LENGTH], SHA256_CTX *);
-__END_DECLS
 
 #endif /* !_SHA256_H_ */

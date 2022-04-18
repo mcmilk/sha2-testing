@@ -1,10 +1,9 @@
 
 /*
- * This code is based on public domain code within the cppcrypto-0.17 library.
- * Source: http://cppcrypto.sourceforge.net/
- * Author: kerukuro
+ * This code is based on public domain code by kerukuro (cppcrypto-0.17)
  *
- * Copyright (c) 2022 Tino Reichardt
+ * Copyright (c) 2022 Tino Reichardt <milky-zfs@mcmilk.de>
+ * Public domain with CC0 1.0.
  */
 
 #ifndef _SHA2_H
