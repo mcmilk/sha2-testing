@@ -1,0 +1,11 @@
+sbase - suckless unix tools
+===========================
+
+sbase is a collection of unix tools that are inherently portable across
+UNIX and UNIX-like systems.
+
+The complement of sbase is ubase[1] which is Linux-specific and provides
+all the non-portable tools. Together they are intended to form a base
+system similar to busybox but much smaller and suckless.
+
+Source: git://git.suckless.org/sbase
