@@ -42,8 +42,8 @@ typedef struct SHA512Context {
 	uint8_t buf[SHA512_BLOCK_LENGTH];
 } SHA512_CTX;
 
-void	SHA512_Init(SHA512_CTX *);
-void	SHA512_Update(SHA512_CTX *, const void *, size_t);
-void	SHA512_Final(unsigned char [SHA512_DIGEST_LENGTH], SHA512_CTX *);
+void SHA512_Init_bsd(SHA512_CTX *);
+void SHA512_Update_bsd(SHA512_CTX *, const void *, size_t);
+void SHA512_Final_bsd(unsigned char [SHA512_DIGEST_LENGTH], SHA512_CTX *);
 
 #endif /* !_SHA512_H_ */

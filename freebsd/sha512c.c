@@ -210,7 +210,7 @@ SHA512_Pad(SHA512_CTX * ctx)
 
 /* SHA-512 initialization.  Begins a SHA-512 operation. */
 void
-SHA512_Init(SHA512_CTX * ctx)
+SHA512_Init_bsd(SHA512_CTX * ctx)
 {
 
 	/* Zero bits processed so far */
@@ -229,7 +229,7 @@ SHA512_Init(SHA512_CTX * ctx)
 
 /* Add bytes into the hash */
 void
-SHA512_Update(SHA512_CTX * ctx, const void *in, size_t len)
+SHA512_Update_bsd(SHA512_CTX * ctx, const void *in, size_t len)
 {
 	uint64_t bitlen[2];
 	uint64_t r;
@@ -275,7 +275,7 @@ SHA512_Update(SHA512_CTX * ctx, const void *in, size_t len)
  * and clears the context state.
  */
 void
-SHA512_Final(unsigned char digest[static SHA512_DIGEST_LENGTH], SHA512_CTX *ctx)
+SHA512_Final_bsd(unsigned char digest[static SHA512_DIGEST_LENGTH], SHA512_CTX *ctx)
 {
 
 	/* Add padding */
@@ -289,7 +289,7 @@ SHA512_Final(unsigned char digest[static SHA512_DIGEST_LENGTH], SHA512_CTX *ctx)
 }
 
 void
-SHA512_256_Init(SHA512_CTX * ctx)
+SHA512_256_Init_bsd(SHA512_CTX * ctx)
 {
 
 	/* Zero bits processed so far */
@@ -307,14 +307,14 @@ SHA512_256_Init(SHA512_CTX * ctx)
 }
 
 void
-SHA512_256_Update(SHA512_CTX * ctx, const void *in, size_t len)
+SHA512_256_Update_bsd(SHA512_CTX * ctx, const void *in, size_t len)
 {
 
-	SHA512_Update(ctx, in, len);
+	SHA512_Update_bsd(ctx, in, len);
 }
 
 void
-SHA512_256_Final(unsigned char digest[static SHA512_256_DIGEST_LENGTH],
+SHA512_256_Final_bsd(unsigned char digest[static SHA512_256_DIGEST_LENGTH],
     SHA512_CTX * ctx)
 {
 
@@ -325,5 +325,5 @@ SHA512_256_Final(unsigned char digest[static SHA512_256_DIGEST_LENGTH],
 	be64enc_vect(digest, ctx->state, SHA512_256_DIGEST_LENGTH);
 
 	/* Clear the context state */
-	memset(ctx, 0, sizeof (*ctx));
+	// memset(ctx, 0, sizeof (*ctx));
 }

@@ -34,8 +34,8 @@
 #define	SHA512_256_DIGEST_LENGTH	32
 #define	SHA512_256_DIGEST_STRING_LENGTH	(SHA512_256_DIGEST_LENGTH * 2 + 1)
 
-void	SHA512_256_Init(SHA512_CTX *);
-void	SHA512_256_Update(SHA512_CTX *, const void *, size_t);
-void	SHA512_256_Final(unsigned char [SHA512_256_DIGEST_LENGTH], SHA512_CTX *);
+void SHA512_256_Init_bsd(SHA512_CTX *);
+void SHA512_256_Update_bsd(SHA512_CTX *, const void *, size_t);
+void SHA512_256_Final_bsd(unsigned char [SHA512_256_DIGEST_LENGTH], SHA512_CTX *);
 
 #endif /* !_SHA512T_H_ */

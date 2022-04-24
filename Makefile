@@ -2,6 +2,10 @@
 
 all: sha2_tests
 
+update:
+	git checkout .
+	git pull
+
 CC	= gcc
 #CC	= clang
 
@@ -19,13 +23,12 @@ TOMCRYPT= tomcrypt/sha2.o
 #CFLAGS	+= -msha -msse4.1 -DHAVE_SHANI
 
 OBJS	= impl_bsd.o impl_cifra.o impl_openssl.o impl_sbase.o \
-	  impl_cppcrypto.o impl_cppcrypto2.o impl_lzma.o impl_tomcrypt.o \
+	  impl_cppcrypto.o impl_lzma.o impl_tomcrypt.o \
 	  sha2_tests.o
 OBJS	+= $(CIFRA) $(SBASE) $(FREEBSD) $(CPPCR) $(SHANI) $(LZMA) $(TOMCRYPT)
 
 sha2_tests: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o sha2_tests
-	#-lcrypto
+	$(CC) $(CFLAGS) $(OBJS) -o sha2_tests -lcrypto
 
 clean:
 	rm -f $(OBJS) sha2_tests

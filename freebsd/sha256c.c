@@ -179,7 +179,7 @@ SHA256_Pad(SHA256_CTX * ctx)
 
 /* SHA-256 initialization.  Begins a SHA-256 operation. */
 void
-SHA256_Init(SHA256_CTX * ctx)
+SHA256_Init_bsd(SHA256_CTX * ctx)
 {
 
 	/* Zero bits processed so far */
@@ -198,7 +198,7 @@ SHA256_Init(SHA256_CTX * ctx)
 
 /* Add bytes into the hash */
 void
-SHA256_Update(SHA256_CTX * ctx, const void *in, size_t len)
+SHA256_Update_bsd(SHA256_CTX * ctx, const void *in, size_t len)
 {
 	uint64_t bitlen;
 	uint32_t r;
@@ -241,7 +241,7 @@ SHA256_Update(SHA256_CTX * ctx, const void *in, size_t len)
  * and clears the context state.
  */
 void
-SHA256_Final(unsigned char digest[static SHA256_DIGEST_LENGTH], SHA256_CTX *ctx)
+SHA256_Final_bsd(unsigned char digest[static SHA256_DIGEST_LENGTH], SHA256_CTX *ctx)
 {
 
 	/* Add padding */
@@ -251,5 +251,5 @@ SHA256_Final(unsigned char digest[static SHA256_DIGEST_LENGTH], SHA256_CTX *ctx)
 	be32enc_vect(digest, ctx->state, SHA256_DIGEST_LENGTH);
 
 	/* Clear the context state */
-	memset(ctx, 0, sizeof (*ctx));
+	// memset(ctx, 0, sizeof (*ctx));
 }

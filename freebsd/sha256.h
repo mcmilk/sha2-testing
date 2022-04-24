@@ -42,8 +42,8 @@ typedef struct SHA256Context {
 	uint8_t buf[SHA256_BLOCK_LENGTH];
 } SHA256_CTX;
 
-void	SHA256_Init(SHA256_CTX *);
-void	SHA256_Update(SHA256_CTX *, const void *, size_t);
-void	SHA256_Final(unsigned char [SHA256_DIGEST_LENGTH], SHA256_CTX *);
+void SHA256_Init_bsd(SHA256_CTX *);
+void SHA256_Update_bsd(SHA256_CTX *, const void *, size_t);
+void SHA256_Final_bsd(unsigned char [SHA256_DIGEST_LENGTH], SHA256_CTX *);
 
 #endif /* !_SHA256_H_ */

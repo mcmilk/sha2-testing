@@ -364,9 +364,9 @@ static const sha2_impl_ops_t *sha256_impls[] = {
 	&sha256_sbase_impl,
 	&sha256_ltc_impl,
 	&sha256_lzma_impl,
-	&sha256_openssl_impl,
 	&sha256_bsd_impl,
 	&sha256_cppcrypto_impl,
+	&sha256_openssl_impl,
 #if defined(__x86_64) && defined(HAVE_SHANI)
 	//&sha256_cppcrypto_shani_impl,
 #endif
@@ -383,9 +383,9 @@ static const sha2_impl_ops_t *sha512_256_impls[] = {
 static const sha2_impl_ops_t *sha512_impls[] = {
 	&sha512_cifra_impl,
 	&sha512_sbase_impl,
-	&sha512_openssl_impl,
 	&sha512_bsd_impl,
 	&sha512_cppcrypto_impl,
+	&sha512_openssl_impl,
 	NULL
 };
 

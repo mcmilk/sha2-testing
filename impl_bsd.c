@@ -15,21 +15,21 @@ static int bsd_SHA256_Init(void **ctx)
 	SHA256_CTX *c = malloc(sizeof(SHA256_CTX));
 	if (!c) exit(111);
 	*ctx = c;
-	SHA256_Init(c);
+	SHA256_Init_bsd(c);
 	return 0;
 }
 
 static int bsd_SHA256_Update(void *ctx, const void *data, size_t len)
 {
 	SHA256_CTX *c = ctx;
-	SHA256_Update(c, data, len);
+	SHA256_Update_bsd(c, data, len);
 	return 0;
 }
 
 static int bsd_SHA256_Final(void *ctx, unsigned char *md)
 {
 	SHA256_CTX *c = ctx;
-	SHA256_Final(md, c);
+	SHA256_Final_bsd(md, c);
 	free(ctx);
 	return 0;
 }
@@ -47,21 +47,21 @@ static int bsd_SHA512_Init(void **ctx)
 	SHA512_CTX *c = malloc(sizeof(SHA512_CTX));
 	if (!c) exit(111);
 	*ctx = c;
-	SHA512_Init(c);
+	SHA512_Init_bsd(c);
 	return 0;
 }
 
 static int bsd_SHA512_Update(void *ctx, const void *data, size_t len)
 {
 	SHA512_CTX *c = ctx;
-	SHA512_Update(c, data, len);
+	SHA512_Update_bsd(c, data, len);
 	return 0;
 }
 
 static int bsd_SHA512_Final(void *ctx, unsigned char *md)
 {
 	SHA512_CTX *c = ctx;
-	SHA512_Final(md, c);
+	SHA512_Final_bsd(md, c);
 	free(ctx);
 	return 0;
 }
@@ -79,21 +79,21 @@ static int bsd_SHA512_256_Init(void **ctx)
 	SHA512_CTX *c = malloc(sizeof(SHA512_CTX));
 	if (!c) exit(111);
 	*ctx = c;
-	SHA512_256_Init(c);
+	SHA512_256_Init_bsd(c);
 	return 0;
 }
 
 static int bsd_SHA512_256_Update(void *ctx, const void *data, size_t len)
 {
 	SHA512_CTX *c = ctx;
-	SHA512_256_Update(c, data, len);
+	SHA512_256_Update_bsd(c, data, len);
 	return 0;
 }
 
 static int bsd_SHA512_256_Final(void *ctx, unsigned char *md)
 {
 	SHA512_CTX *c = ctx;
-	SHA512_256_Final(md, c);
+	SHA512_256_Final_bsd(md, c);
 	free(ctx);
 	return 0;
 }
