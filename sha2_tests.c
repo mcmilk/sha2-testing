@@ -191,7 +191,7 @@ void check_result(const char *ref, const char *res, int len)
 {
 	if (strncmp(ref, res, len) != 0) {
 		printf("Wrong Result! %s != %s\n", ref, res);
-		//exit(1);
+		exit(1);
 	}
 }
 
@@ -272,6 +272,7 @@ static void chksum_run(chksum_stat_t * cs, int round, uint64_t * result)
 	void *ctx;
 	void *buf;
 	unsigned char md[64 * 2 + 1];
+	int rv;
 
 	switch (round) {
 	case 1:		/* 1k */
@@ -310,7 +311,11 @@ static void chksum_run(chksum_stat_t * cs, int round, uint64_t * result)
 
 	/* warmup */
 	start = my_gethrtime();
-	cs->sha2->init(&ctx);
+	rv = cs->sha2->init(&ctx);
+
+	/* method not useable */
+	if (rv == -1) return;
+
 	run_count = 0;
 	do {
 		for (l = 0; l < loops; l++, run_count++)
@@ -341,6 +346,9 @@ static void chksum_run(chksum_stat_t * cs, int round, uint64_t * result)
 
 static void chksum_benchit(chksum_stat_t * cs)
 {
+	if (cs->sha2->is_supported && (cs->sha2->is_supported() == 0))
+		return;
+
 	chksum_run(cs, 1, &cs->bs1k);
 	chksum_run(cs, 2, &cs->bs4k);
 	chksum_run(cs, 3, &cs->bs16k);
@@ -366,10 +374,19 @@ static const sha2_impl_ops_t *sha256_impls[] = {
 	&sha256_lzma_impl,
 	&sha256_bsd_impl,
 	&sha256_cppcrypto_impl,
-	&sha256_openssl_impl,
-#if defined(__x86_64) && defined(HAVE_SHANI)
-	//&sha256_cppcrypto_shani_impl,
+#if defined(__aarch64__)
+	&sha256_cppcrypto_arm_impl,
 #endif
+#if defined(__PPC64__)
+	&sha256_cppcrypto_ppc64_impl,
+#endif
+#if defined(__x86_64)
+	&sha256_cppcrypto_shani_impl,
+	&sha256_cppcrypto_ssse3_impl,
+	&sha256_cppcrypto_avx_impl,
+	&sha256_cppcrypto_ni_impl,
+#endif
+	&sha256_openssl_impl,
 	NULL
 };
 
@@ -385,6 +402,14 @@ static const sha2_impl_ops_t *sha512_impls[] = {
 	&sha512_sbase_impl,
 	&sha512_bsd_impl,
 	&sha512_cppcrypto_impl,
+#if defined(__PPC64__)
+	&sha512_cppcrypto_ppc64_impl,
+#endif
+#if defined(__x86_64)
+	&sha512_cppcrypto_ssse3_impl,
+	&sha512_cppcrypto_avx2_impl,
+	&sha512_cppcrypto_avx_impl,
+#endif
 	&sha512_openssl_impl,
 	NULL
 };

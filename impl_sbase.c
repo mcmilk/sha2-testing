@@ -12,21 +12,21 @@ static int sbase_SHA256_Init(void **ctx)
 {
 	struct sha256 *c = malloc(sizeof(struct sha256));
 	if (!c) exit(111);
-	sha256_init(c);
+	sb_sha256_init(c);
 	*ctx = c;
 	return 0;
 }
 
 static int sbase_SHA256_Update(void *ctx, const void *data, size_t len)
 {
-	sha256_update(ctx, data, len);
+	sb_sha256_update(ctx, data, len);
 	return 0;
 }
 
 static int sbase_SHA256_Final(void *ctx, unsigned char *md)
 {
 	void *c = ctx;
-	sha256_sum(ctx, md);
+	sb_sha256_sum(ctx, md);
 	free(c);
 	return 0;
 }
@@ -43,20 +43,20 @@ static int sbase_SHA512_Init(void **ctx)
 {
 	struct sha512 *c = malloc(sizeof(struct sha512));
 	if (!c) exit(111);
-	sha512_init(c);
+	sb_sha512_init(c);
 	*ctx = c;
 	return 0;
 }
 
 static int sbase_SHA512_Update(void *ctx, const void *data, size_t len)
 {
-	sha512_update(ctx, data, len);
+	sb_sha512_update(ctx, data, len);
 	return 0;
 }
 
 static int sbase_SHA512_Final(void *ctx, unsigned char *md)
 {
-	sha512_sum(ctx, md);
+	sb_sha512_sum(ctx, md);
 	free(ctx);
 	return 0;
 }
@@ -72,20 +72,20 @@ const sha2_impl_ops_t sha512_sbase_impl = {
 static int sbase_SHA512_256_Init(void **ctx)
 {
 	struct sha512 *c = malloc(sizeof(struct sha512));
-	sha512_256_init(c);
+	sb_sha512_256_init(c);
 	*ctx = c;
 	return 0;
 }
 
 static int sbase_SHA512_256_Update(void *ctx, const void *data, size_t len)
 {
-	sha512_256_update(ctx, data, len);
+	sb_sha512_256_update(ctx, data, len);
 	return 0;
 }
 
 static int sbase_SHA512_256_Final(void *ctx, unsigned char *md)
 {
-	sha512_sum(ctx, md);
+	sb_sha512_sum(ctx, md);
 	free(ctx);
 	return 0;
 }
