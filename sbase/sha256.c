@@ -106,7 +106,7 @@ static void pad(struct sha256 *s)
 	processblock(s, s->buf);
 }
 
-void sha256_init(void *ctx)
+void sb_sha256_init(void *ctx)
 {
 	struct sha256 *s = ctx;
 	s->len = 0;
@@ -120,7 +120,7 @@ void sha256_init(void *ctx)
 	s->h[7] = 0x5be0cd19;
 }
 
-void sha256_sum_n(void *ctx, uint8_t * md, int n)
+void sb_sha256_sum_n(void *ctx, uint8_t * md, int n)
 {
 	struct sha256 *s = ctx;
 	int i;
@@ -134,12 +134,12 @@ void sha256_sum_n(void *ctx, uint8_t * md, int n)
 	}
 }
 
-void sha256_sum(void *ctx, uint8_t md[SHA256_DIGEST_LENGTH])
+void sb_sha256_sum(void *ctx, uint8_t md[SHA256_DIGEST_LENGTH])
 {
-	sha256_sum_n(ctx, md, 8);
+	sb_sha256_sum_n(ctx, md, 8);
 }
 
-void sha256_update(void *ctx, const void *m, unsigned long len)
+void sb_sha256_update(void *ctx, const void *m, unsigned long len)
 {
 	struct sha256 *s = ctx;
 	const uint8_t *p = m;

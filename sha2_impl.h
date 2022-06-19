@@ -27,13 +27,24 @@ typedef int (*sha2_final_f)(void *ctx, unsigned char *md);
 typedef int (*sha2_is_supported_f)(void);
 
 typedef struct sha2_impl_ops {
+	/* must have */
 	sha2_init_f init;
 	sha2_update_f update;
 	sha2_final_f final;
-	sha2_is_supported_f is_supported;
 	int digest_len;
 	const char *name;
+
+	/* optional */
+	sha2_is_supported_f is_supported;
 } sha2_impl_ops_t;
+
+#if defined(__aarch64__)
+extern const sha2_impl_ops_t sha256_cppcrypto_arm_impl;
+#endif
+
+#if defined(__PPC64__)
+extern const sha2_impl_ops_t sha256_cppcrypto_ppc64_impl;
+#endif
 
 extern const sha2_impl_ops_t sha256_cifra_impl;
 extern const sha2_impl_ops_t sha512_cifra_impl;
@@ -53,9 +64,22 @@ extern const sha2_impl_ops_t sha512_bsd_impl;
 extern const sha2_impl_ops_t sha512_256_bsd_impl;
 
 extern const sha2_impl_ops_t sha256_cppcrypto_impl;
+
 #if defined(__x86_64)
 extern const sha2_impl_ops_t sha256_cppcrypto_shani_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_ssse3_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_avx_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_ni_impl;
+
+extern const sha2_impl_ops_t sha512_cppcrypto_ssse3_impl;
+extern const sha2_impl_ops_t sha512_cppcrypto_avx2_impl;
+extern const sha2_impl_ops_t sha512_cppcrypto_avx_impl;
 #endif
+
+#if defined(__PPC64__)
+extern const sha2_impl_ops_t sha512_cppcrypto_ppc64_impl;
+#endif
+
 extern const sha2_impl_ops_t sha512_cppcrypto_impl;
 extern const sha2_impl_ops_t sha512_256_cppcrypto_impl;
 

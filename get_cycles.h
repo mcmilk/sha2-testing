@@ -67,21 +67,13 @@ static inline cycles_t get_cycles(void)
 {
 	return __rdtsc();
 }
-#elif defined(__aarch64__) && defined(HAVE_ARMV8_PMCCNTR_EL0)
+#elif defined(__aarch64__)
 typedef uint64_t cycles_t;
-static inline get_cycles get_cycles(void)
+static inline cycles_t get_cycles(void)
 {
 	uint64_t cc = 0;
 	asm volatile("mrs %0, PMCCNTR_EL0" : "=r"(cc));
 	return cc;
-}
-#elif defined(__aarch64__) && defined(HAVE_ARMV8_CNTVCT_EL0)
-typedef uint64_t cycles_t;
-static inline cycles_t get_cycles(void)
-{
-	uint64_t Rt;
-	asm volatile("mrs %0,  CNTVCT_EL0" : "=r" (Rt));
-	return Rt;
 }
 #elif defined(HAVE_ARMV7A_CNTVCT)
 typedef uint64_t ticks;
@@ -103,7 +95,6 @@ static inline ticks getticks(void)
 typedef uint64_t cycles_t;
 static inline cycles_t get_cycles(void)
 {
-//#warning "Unknown platform! XXX TODO"
 	return 0;
 }
 #endif

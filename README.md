@@ -97,23 +97,24 @@ Architecture: aarch64 - Apple M1 Little Endian
 Flags:        fp asimd aes sha1 sha2 crc32 cpuid sha3 sha512 ...
 CC=gcc CFLAGS=-Os
 implementation               1k      4k     16k     64k    256k      1m      4m
-sha256-cifra                 69      76      90     147     180     244     255
-sha256-sbase                160     160     160     160     160     160     160
-sha256-tomcrypt             160     160     160     160     160     160     160
-sha256-lzma                 276     275     276     275     276     276     276
-sha256-bsd                  293     292     292     292     292     292     292
-sha256-cppcrypto            285     286     286     286     286     286     286
-sha256-openssl             2179    2193    2196    2195    2193    2196    2195
+sha256-cifra                 69      89      95     130     186     244     255
+sha256-sbase                160     160     159     158     158     158     159
+sha256-tomcrypt             160     160     158     159     158     158     159
+sha256-lzma                 273     276     275     276     275     275     275
+sha256-bsd                  292     292     291     291     292     291     292
+sha256-cppcrypto            285     286     285     285     285     285     284
+sha256-cppcrypto-armv8     1946    1957    1959    1959    1958    1956    1955
+sha256-openssl             2180    2192    2195    2195    2195    2197    2196
 
-sha512_256-sbase            273     273     273     273     273     273     273
-sha512_256-bsd              469     469     469     469     469     469     469
-sha512_256-cppcrypto        455     456     457     457     456     456     456
+sha512_256-sbase            273     273     265     267     266     267     269
+sha512_256-bsd              468     469     469     468     468     468     468
+sha512_256-cppcrypto        454     456     457     455     456     455     455
 
-sha512-cifra                446     446     446     446     446     446     446
-sha512-sbase                273     273     273     273     273     273     273
-sha512-bsd                  469     469     469     469     469     470     469
-sha512-cppcrypto            455     456     457     457     456     456     456
-sha512-openssl             1281    1285    1286    1286    1286    1286    1286
+sha512-cifra                444     445     443     442     442     440     443
+sha512-sbase                273     273     264     267     265     266     268
+sha512-bsd                  469     470     469     466     468     468     469
+sha512-cppcrypto            455     456     456     456     456     455     456
+sha512-openssl             1280    1284    1285    1285    1285    1284    1282
 ```
 
 ```
@@ -194,23 +195,24 @@ Architecture: aarch64 - X-Gene Little Endian (3300 MHz)
 Flags:        fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
 CC=gcc CFLAGS=-Os
 implementation               1k      4k     16k     64k    256k      1m      4m
-sha256-cifra                100     100     100     100     100     100     100
-sha256-sbase                107     108     108     108     108     108     108
-sha256-tomcrypt             104     104     104     104     104     105     105
-sha256-lzma                 137     137     138     137     137     137     137
-sha256-bsd                  158     159     159     159     159     159     159
-sha256-cppcrypto            149     150     150     150     150     150     150
-sha256-openssl              671     676     676     677     676     677     677
+sha256-cifra                 97      97      97      97      97      97      97
+sha256-sbase                108     108     108     108     108     108     108
+sha256-tomcrypt             108     108     108     108     108     108     108
+sha256-lzma                 136     136     136     136     136     136     136
+sha256-bsd                  156     156     157     157     157     157     157
+sha256-cppcrypto            150     150     150     150     150     150     150
+sha256-cppcrypto-armv8      677     686     688     689     689     689     689
+sha256-openssl              671     676     677     677     676     677     678
 
-sha512_256-sbase            167     168     168     167     168     167     168
-sha512_256-bsd              247     249     248     249     249     249     249
-sha512_256-cppcrypto        239     241     241     241     241     241     241
+sha512_256-sbase            163     164     164     164     164     164     164
+sha512_256-bsd              249     250     251     251     251     251     251
+sha512_256-cppcrypto        239     241     242     241     241     241     241
 
-sha512-cifra                155     156     156     156     156     156     156
-sha512-sbase                167     168     167     168     168     168     168
-sha512-bsd                  247     249     249     249     249     249     249
-sha512-cppcrypto            239     241     241     241     241     241     241
-sha512-openssl              264     266     266     266     266     266     266
+sha512-cifra                155     156     156     157     157     157     157
+sha512-sbase                164     164     164     164     164     164     164
+sha512-bsd                  249     251     251     250     251     251     251
+sha512-cppcrypto            240     241     242     241     241     241     241
+sha512-openssl              264     265     266     266     266     266     266
 ```
 
 ```

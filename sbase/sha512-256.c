@@ -5,9 +5,9 @@
 
 #include "sha2.h"
 
-extern void sha512_sum_n(void *, uint8_t *, int n);
+extern void sb_sha512_sum_n(void *, uint8_t *, int n);
 
-void sha512_256_init(void *ctx)
+void sb_sha512_256_init(void *ctx)
 {
 	struct sha512 *s = ctx;
 	s->len = 0;
@@ -21,7 +21,7 @@ void sha512_256_init(void *ctx)
 	s->h[7] = 0x0eb72ddc81c52ca2ULL;
 }
 
-void sha512_256_sum(void *ctx, uint8_t md[SHA512_256_DIGEST_LENGTH])
+void sb_sha512_256_sum(void *ctx, uint8_t md[SHA512_256_DIGEST_LENGTH])
 {
-	sha512_sum_n(ctx, md, 4);
+	sb_sha512_sum_n(ctx, md, 4);
 }
