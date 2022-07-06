@@ -1,0 +1,27 @@
+
+FILE               Functions
+----------------------------------------------------------
+sha256-armv8.S     sha256_block_armv8_neon
+sha256-armv8.S     sha256_block_armv8_hw
+sha512-armv8.S     sha512_block_armv8_hw
+----------------------------------------------------------
+sha256-x86_64.S    sha256_block_data_order_shaext
+sha256-x86_64.S    sha256_block_data_order_ssse3
+sha256-x86_64.S    sha256_block_data_order_avx
+sha256-x86_64.S    sha256_block_data_order_avx2
+----------------------------------------------------------
+sha512-x86_64.S    sha512_block_data_order_avx
+sha512-x86_64.S    sha512_block_data_order_avx2
+----------------------------------------------------------
+sha256-ppc64le.S   sha256_block_ppc
+sha256-ppc.S       sha256_block_ppc
+----------------------------------------------------------
+sha256p8-ppc64le.S sha256_block_p8
+sha256p8-ppc.S     sha256_block_p8
+----------------------------------------------------------
+sha512-ppc64le.S   sha512_block_ppc
+sha512-ppc.S       sha512_block_ppc
+----------------------------------------------------------
+sha512p8-ppc64le.S sha512_block_p8
+sha512p8-ppc.S     sha512_block_p8
+----------------------------------------------------------

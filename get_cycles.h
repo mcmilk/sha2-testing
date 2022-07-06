@@ -67,14 +67,6 @@ static inline cycles_t get_cycles(void)
 {
 	return __rdtsc();
 }
-#elif defined(__aarch64__)
-typedef uint64_t cycles_t;
-static inline cycles_t get_cycles(void)
-{
-	uint64_t cc = 0;
-	asm volatile("mrs %0, PMCCNTR_EL0" : "=r"(cc));
-	return cc;
-}
 #elif defined(HAVE_ARMV7A_CNTVCT)
 typedef uint64_t ticks;
 static inline ticks getticks(void)

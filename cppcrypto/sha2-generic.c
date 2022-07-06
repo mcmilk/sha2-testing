@@ -6,7 +6,98 @@
 
 #include <string.h>
 
-#include "sha2.h"
+#include "sha256.h"
+#include "sha512.h"
+
+/* SHA256 */
+static const uint32_t SHA256_K[64] = {
+	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
+	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+	0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+	0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
+	0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+	0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+	0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+	0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+	0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+	0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3,
+	0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+	0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
+	0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+};
+
+#define Ch(x,y,z)	((z) ^ ((x) & ((y) ^ (z))))
+#define Maj(x,y,z)	(((y) & (z)) | (((y) | (z)) & (x)))
+
+#define rotr32(x,n)	(((x) >> n) | ((x) << (32 - n)))
+#define sum0(x)		(rotr32((x),  2) ^ rotr32((x), 13) ^ rotr32((x), 22))
+#define sum1(x)		(rotr32((x),  6) ^ rotr32((x), 11) ^ rotr32((x), 25))
+#define sigma0(x)	(rotr32((x),  7) ^ rotr32((x), 18) ^ ((x) >> 3))
+#define sigma1(x)	(rotr32((x), 17) ^ rotr32((x), 19) ^ ((x) >> 10))
+
+#define WU(j) (W[j & 15] += sigma1(W[(j + 14) & 15]) + W[(j + 9) & 15] + sigma0(W[(j + 1) & 15]))
+
+#define COMPRESS_ROUND(i, j, K) \
+	T1 = h + sum1(e) + Ch(e, f, g) + K[i + j] + (i? WU(j): W[j]); \
+	T2 = sum0(a) + Maj(a, b, c); \
+	h = g, g = f, f = e, e = d + T1; \
+	d = c, c = b, b = a, a = T1 + T2;
+
+void sha256_transform(uint32_t state[8], const void *data, size_t num_blks)
+{
+	uint64_t blk;
+
+	for (blk = 0; blk < num_blks; blk++) {
+		uint32_t W[16];
+		uint32_t a, b, c, d, e, f, g, h;
+		uint32_t T1, T2;
+		int i;
+
+		for (i = 0; i < 16; i++) {
+			W[i] = cpu_to_be32((((const uint32_t *)(data))[blk * 16 + i]));
+		}
+
+		a = state[0];
+		b = state[1];
+		c = state[2];
+		d = state[3];
+		e = state[4];
+		f = state[5];
+		g = state[6];
+		h = state[7];
+
+		for (i = 0; i <= 63; i += 16) {
+			COMPRESS_ROUND(i, 0, SHA256_K);
+			COMPRESS_ROUND(i, 1, SHA256_K);
+			COMPRESS_ROUND(i, 2, SHA256_K);
+			COMPRESS_ROUND(i, 3, SHA256_K);
+			COMPRESS_ROUND(i, 4, SHA256_K);
+			COMPRESS_ROUND(i, 5, SHA256_K);
+			COMPRESS_ROUND(i, 6, SHA256_K);
+			COMPRESS_ROUND(i, 7, SHA256_K);
+			COMPRESS_ROUND(i, 8, SHA256_K);
+			COMPRESS_ROUND(i, 9, SHA256_K);
+			COMPRESS_ROUND(i, 10, SHA256_K);
+			COMPRESS_ROUND(i, 11, SHA256_K);
+			COMPRESS_ROUND(i, 12, SHA256_K);
+			COMPRESS_ROUND(i, 13, SHA256_K);
+			COMPRESS_ROUND(i, 14, SHA256_K);
+			COMPRESS_ROUND(i, 15, SHA256_K);
+		}
+
+		state[0] += a;
+		state[1] += b;
+		state[2] += c;
+		state[3] += d;
+		state[4] += e;
+		state[5] += f;
+		state[6] += g;
+		state[7] += h;
+	}
+}
 
 /* SHA512 */
 static const uint64_t SHA512_K[80] = {
@@ -52,51 +143,39 @@ static const uint64_t SHA512_K[80] = {
 	0x5fcb6fab3ad6faec, 0x6c44198c4a475817
 };
 
-#define Ch(x,y,z)	((z) ^ ((x) & ((y) ^ (z))))
-#define Maj(x,y,z)	(((x) & (y)) | ((z) & ((x) ^ (y))))
+#undef sum0
+#undef sum1
+#undef sigma0
+#undef sigma1
 
 #define rotr64(x,n)	(((x) >> n) | ((x) << (64 - n)))
 #define sum0(x)		(rotr64((x), 28) ^ rotr64((x), 34) ^ rotr64((x), 39))
 #define sum1(x)		(rotr64((x), 14) ^ rotr64((x), 18) ^ rotr64((x), 41))
-#define sigma0(x)	(rotr64((x), 1)  ^ rotr64((x), 8)  ^ ((x) >> 7))
+#define sigma0(x)	(rotr64((x),  1) ^ rotr64((x), 8)  ^ ((x) >> 7))
 #define sigma1(x)	(rotr64((x), 19) ^ rotr64((x), 61) ^ ((x) >> 6))
 
-#define WU(j) (W[j & 15] += sigma1(W[(j + 14) & 15]) + W[(j + 9) & 15] + sigma0(W[(j + 1) & 15]))
-
-#define COMPRESS_ROUND(i, j, K) \
-		   T1 = h + sum1(e) + Ch(e, f, g) + K[i + j] + (i? WU(j): W[j]); \
-			T2 = sum0(a) + Maj(a, b, c); \
-			h = g; \
-			g = f; \
-			f = e; \
-			e = d + T1; \
-			d = c; \
-			c = b; \
-			b = a; \
-			a = T1 + T2;
-
-void sha512_transform(sha512_ctx * ctx, void *mp, int num_blks)
+void sha512_transform(uint64_t state[8], const void *data, size_t num_blks)
 {
 	uint64_t blk;
+
 	for (blk = 0; blk < num_blks; blk++) {
 		uint64_t W[16];
 		uint64_t a, b, c, d, e, f, g, h;
 		uint64_t T1, T2;
 		int i;
 
-		for (i = 0; i < 128 / 8; i++) {
-			W[i] =
-			    cpu_to_be64((((const uint64_t *)(mp))[blk * 16 + i]));
+		for (i = 0; i < 16; i++) {
+			W[i] = cpu_to_be64((((const uint64_t *)(data))[blk * 16 + i]));
 		}
 
-		a = ctx->state[0];
-		b = ctx->state[1];
-		c = ctx->state[2];
-		d = ctx->state[3];
-		e = ctx->state[4];
-		f = ctx->state[5];
-		g = ctx->state[6];
-		h = ctx->state[7];
+		a = state[0];
+		b = state[1];
+		c = state[2];
+		d = state[3];
+		e = state[4];
+		f = state[5];
+		g = state[6];
+		h = state[7];
 
 		for (i = 0; i <= 79; i += 16) {
 			COMPRESS_ROUND(i, 0, SHA512_K);
@@ -116,96 +195,13 @@ void sha512_transform(sha512_ctx * ctx, void *mp, int num_blks)
 			COMPRESS_ROUND(i, 14, SHA512_K);
 			COMPRESS_ROUND(i, 15, SHA512_K);
 		}
-		ctx->state[0] += a;
-		ctx->state[1] += b;
-		ctx->state[2] += c;
-		ctx->state[3] += d;
-		ctx->state[4] += e;
-		ctx->state[5] += f;
-		ctx->state[6] += g;
-		ctx->state[7] += h;
-	}
-}
-
-/* SHA256 */
-static const uint32_t SHA256_K[64] = {
-	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
-	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
-	0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-	0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
-	0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-	0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
-	0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-	0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
-	0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-	0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3,
-	0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-	0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
-	0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
-	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
-};
-
-#undef sum0
-#undef sum1
-#undef sigma0
-#undef sigma1
-
-#define rotr32(x,n)	(((x) >> n) | ((x) << (32 - n)))
-#define sum0(x)		(rotr32((x), 2) ^ rotr32((x), 13) ^ rotr32((x), 22))
-#define sum1(x)		(rotr32((x), 6) ^ rotr32((x), 11) ^ rotr32((x), 25))
-#define sigma0(x)	(rotr32((x), 7) ^ rotr32((x), 18) ^ ((x) >> 3))
-#define sigma1(x)	(rotr32((x), 17) ^ rotr32((x), 19) ^ ((x) >> 10))
-
-void sha256_transform(sha256_ctx * ctx, void *mp, int num_blks)
-{
-	uint64_t blk;
-	for (blk = 0; blk < num_blks; blk++) {
-		uint32_t W[16];
-		uint32_t a, b, c, d, e, f, g, h;
-		uint32_t T1, T2;
-		int i;
-
-		for (i = 0; i < 64 / 4; i++) {
-			W[i] =
-			    cpu_to_be32((((const uint32_t *)(mp))[blk * 16 + i]));
-		}
-
-		a = ctx->state[0];
-		b = ctx->state[1];
-		c = ctx->state[2];
-		d = ctx->state[3];
-		e = ctx->state[4];
-		f = ctx->state[5];
-		g = ctx->state[6];
-		h = ctx->state[7];
-
-		for (i = 0; i <= 63; i += 16) {
-			COMPRESS_ROUND(i, 0, SHA256_K);
-			COMPRESS_ROUND(i, 1, SHA256_K);
-			COMPRESS_ROUND(i, 2, SHA256_K);
-			COMPRESS_ROUND(i, 3, SHA256_K);
-			COMPRESS_ROUND(i, 4, SHA256_K);
-			COMPRESS_ROUND(i, 5, SHA256_K);
-			COMPRESS_ROUND(i, 6, SHA256_K);
-			COMPRESS_ROUND(i, 7, SHA256_K);
-			COMPRESS_ROUND(i, 8, SHA256_K);
-			COMPRESS_ROUND(i, 9, SHA256_K);
-			COMPRESS_ROUND(i, 10, SHA256_K);
-			COMPRESS_ROUND(i, 11, SHA256_K);
-			COMPRESS_ROUND(i, 12, SHA256_K);
-			COMPRESS_ROUND(i, 13, SHA256_K);
-			COMPRESS_ROUND(i, 14, SHA256_K);
-			COMPRESS_ROUND(i, 15, SHA256_K);
-		}
-		ctx->state[0] += a;
-		ctx->state[1] += b;
-		ctx->state[2] += c;
-		ctx->state[3] += d;
-		ctx->state[4] += e;
-		ctx->state[5] += f;
-		ctx->state[6] += g;
-		ctx->state[7] += h;
+		state[0] += a;
+		state[1] += b;
+		state[2] += c;
+		state[3] += d;
+		state[4] += e;
+		state[5] += f;
+		state[6] += g;
+		state[7] += h;
 	}
 }

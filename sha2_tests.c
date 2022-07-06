@@ -202,6 +202,9 @@ void test_with(const sha2_impl_ops_t * sha2, int id)
 	size_t bufsize = 0;
 	cycles_t start, stop;
 
+	if (sha2->is_supported && (sha2->is_supported() == 0))
+		return;
+
 	for (i = 0; TestArray[i].input_cnt; i++) {
 		if (TestArray[i].input_len > bufsize)
 			bufsize = TestArray[i].input_len;
@@ -375,16 +378,24 @@ static const sha2_impl_ops_t *sha256_impls[] = {
 	&sha256_bsd_impl,
 	&sha256_cppcrypto_impl,
 #if defined(__aarch64__)
-	&sha256_cppcrypto_arm_impl,
+	&sha256_ossl_neon_impl,
+	&sha256_ossl_armv8_ce_impl,
+	&sha256_noloder_armv8_ce_impl,
 #endif
 #if defined(__PPC64__)
-	&sha256_cppcrypto_ppc64_impl,
+	&sha256_ossl_ppc64_impl,
+	&sha256_ossl_ppc64p8_impl,
+	&sha256_noloader_ppc64_impl,
 #endif
 #if defined(__x86_64)
-	&sha256_cppcrypto_shani_impl,
-	&sha256_cppcrypto_ssse3_impl,
-	&sha256_cppcrypto_avx_impl,
-	&sha256_cppcrypto_ni_impl,
+	&sha256_intel_ssse3_impl,
+	&sha256_intel_avx_impl,
+	&sha256_intel_ni_impl,
+
+	&sha256_ossl_ssse3_impl,
+	&sha256_ossl_avx_impl,
+	&sha256_ossl_avx2_impl,
+	&sha256_ossl_ni_impl,
 #endif
 	&sha256_openssl_impl,
 	NULL
@@ -394,6 +405,12 @@ static const sha2_impl_ops_t *sha512_256_impls[] = {
 	&sha512_256_sbase_impl,
 	&sha512_256_bsd_impl,
 	&sha512_256_cppcrypto_impl,
+#if defined(__aarch64__)
+	&sha512_256_ossl_armv8_ce_impl,
+#endif
+#if defined(__x86_64)
+	&sha512t_ossl_avx2_impl,
+#endif
 	NULL
 };
 
@@ -402,13 +419,21 @@ static const sha2_impl_ops_t *sha512_impls[] = {
 	&sha512_sbase_impl,
 	&sha512_bsd_impl,
 	&sha512_cppcrypto_impl,
+#if defined(__aarch64__)
+	&sha512_ossl_armv8_ce_impl,
+#endif
 #if defined(__PPC64__)
-	&sha512_cppcrypto_ppc64_impl,
+	&sha512_ossl_ppc64_impl,
+	&sha512_ossl_ppc64p8_impl,
+	&sha512_noloader_ppc64_impl,
 #endif
 #if defined(__x86_64)
-	&sha512_cppcrypto_ssse3_impl,
-	&sha512_cppcrypto_avx2_impl,
-	&sha512_cppcrypto_avx_impl,
+	&sha512_intel_ssse3_impl,
+	&sha512_intel_avx_impl,
+	&sha512_intel_avx2_impl,
+
+	&sha512_ossl_avx_impl,
+	&sha512_ossl_avx2_impl,
 #endif
 	&sha512_openssl_impl,
 	NULL

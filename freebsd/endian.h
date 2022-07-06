@@ -33,8 +33,8 @@
  */
 
 /* *BSD has it's own _MACHINE_ENDIAN_H_ */
-#ifndef _MACHINE_ENDIAN_H_
-#define _MACHINE_ENDIAN_H_
+#ifndef MY_MACHINE_ENDIAN_H_
+#define MY_MACHINE_ENDIAN_H_
 
 #include <sys/types.h>
 #include <strings.h>
