@@ -202,6 +202,9 @@ void test_with(const sha2_impl_ops_t * sha2, int id)
 	size_t bufsize = 0;
 	cycles_t start, stop;
 
+	if (sha2->is_supported && (sha2->is_supported() == 0))
+		return;
+
 	for (i = 0; TestArray[i].input_cnt; i++) {
 		if (TestArray[i].input_len > bufsize)
 			bufsize = TestArray[i].input_len;
@@ -381,7 +384,6 @@ static const sha2_impl_ops_t *sha256_impls[] = {
 	&sha256_cppcrypto_ppc64_impl,
 #endif
 #if defined(__x86_64)
-	&sha256_cppcrypto_shani_impl,
 	&sha256_cppcrypto_ssse3_impl,
 	&sha256_cppcrypto_avx_impl,
 	&sha256_cppcrypto_ni_impl,
@@ -402,13 +404,16 @@ static const sha2_impl_ops_t *sha512_impls[] = {
 	&sha512_sbase_impl,
 	&sha512_bsd_impl,
 	&sha512_cppcrypto_impl,
+#if defined(__aarch64__)
+	&sha512_cppcrypto_arm_impl,
+#endif
 #if defined(__PPC64__)
 	&sha512_cppcrypto_ppc64_impl,
 #endif
 #if defined(__x86_64)
 	&sha512_cppcrypto_ssse3_impl,
-	&sha512_cppcrypto_avx2_impl,
 	&sha512_cppcrypto_avx_impl,
+	&sha512_cppcrypto_avx2_impl,
 #endif
 	&sha512_openssl_impl,
 	NULL

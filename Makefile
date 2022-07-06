@@ -14,7 +14,7 @@ CFLAGS	= -Os -Wall
 CIFRA	= cifra/blockwise.o cifra/sha256.o cifra/sha512.o
 SBASE	= sbase/sha256.o sbase/sha512-256.o sbase/sha512.o
 FREEBSD	= freebsd/sha256c.o freebsd/sha512c.o
-CPPCR	= cppcrypto/sha2.o cppcrypto/sha2-generic.o
+CPPCR	= cppcrypto/sha256.o cppcrypto/sha512.o cppcrypto/sha2-generic.o
 LZMA	= lzma/sha256.o
 TOMCRYPT= tomcrypt/sha2.o
 
@@ -34,14 +34,27 @@ CFLAGS	+= -msha -msse4
 endif
 
 ifeq (x86_64,$(HOSTTYPE))
-OBJS	+= intel/sha256_ssse3.o intel/sha512_ssse3.o intel/sha256_avx.o intel/sha256_ni.o intel/sha512_avx2.o intel/sha512_avx.o
-OBJS	+= cppcrypto/sha2-shani-x64.o
-CFLAGS	+= -msha -msse4
+OBJS	+= intel/sha256_ssse3.o
+OBJS	+= intel/sha512_ssse3.o
+OBJS	+= intel/sha256_avx.o
+OBJS	+= intel/sha256_ni.o
+OBJS	+= intel/sha512_avx2.o
+OBJS	+= intel/sha512_avx.o
+#OBJS	+= cppcrypto/sha2-shani-x64.o
+#OBJS	+= cppcrypto/sha256-sse.o
+#OBJS	+= cppcrypto/sha256_compress_x86_64_avx.o
+#OBJS	+= cppcrypto/sha256_compress_x86_64_avx2.o
+#OBJS	+= cppcrypto/sha256_compress_x86_64_avx512.o
+#OBJS	+= cppcrypto/sha512_compress_x86_64_avx.o
+#OBJS	+= cppcrypto/sha512_compress_x86_64_avx2.o
+#OBJS	+= cppcrypto/sha512_compress_x86_64_avx512.o
+#CFLAGS	+= -msha -msse4
 endif
 
 ifeq (aarch64,$(HOSTTYPE))
 OBJS	+= cppcrypto/sha256-aarch64.o
-CFLAGS	+= -march=armv8-a+crypto
+OBJS	+= cppcrypto/sha512-aarch64.o
+ASFLAGS	+= -march=armv8-a+crypto+sha3
 endif
 
 ifeq (ppc64,$(HOSTTYPE))

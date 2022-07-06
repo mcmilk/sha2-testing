@@ -40,6 +40,7 @@ typedef struct sha2_impl_ops {
 
 #if defined(__aarch64__)
 extern const sha2_impl_ops_t sha256_cppcrypto_arm_impl;
+extern const sha2_impl_ops_t sha512_cppcrypto_arm_impl;
 #endif
 
 #if defined(__PPC64__)
@@ -66,14 +67,23 @@ extern const sha2_impl_ops_t sha512_256_bsd_impl;
 extern const sha2_impl_ops_t sha256_cppcrypto_impl;
 
 #if defined(__x86_64)
-extern const sha2_impl_ops_t sha256_cppcrypto_shani_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_sse2_impl;
 extern const sha2_impl_ops_t sha256_cppcrypto_ssse3_impl;
 extern const sha2_impl_ops_t sha256_cppcrypto_avx_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_shani_impl;
 extern const sha2_impl_ops_t sha256_cppcrypto_ni_impl;
 
 extern const sha2_impl_ops_t sha512_cppcrypto_ssse3_impl;
-extern const sha2_impl_ops_t sha512_cppcrypto_avx2_impl;
 extern const sha2_impl_ops_t sha512_cppcrypto_avx_impl;
+extern const sha2_impl_ops_t sha512_cppcrypto_avx2_impl;
+
+extern const sha2_impl_ops_t sha256_cppcrypto_avx_v2_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_avx2_v2_impl;
+extern const sha2_impl_ops_t sha256_cppcrypto_avx512_v2_impl;
+
+extern const sha2_impl_ops_t sha512_cppcrypto_avx_v2_impl;
+extern const sha2_impl_ops_t sha512_cppcrypto_avx2_v2_impl;
+extern const sha2_impl_ops_t sha512_cppcrypto_avx512_v2_impl;
 #endif
 
 #if defined(__PPC64__)
