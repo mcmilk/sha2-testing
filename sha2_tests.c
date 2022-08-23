@@ -392,6 +392,7 @@ static const sha2_impl_ops_t *sha256_impls[] = {
 	&sha256_intel_avx_impl,
 	&sha256_intel_ni_impl,
 
+	&sha256_ossl_x64_impl,
 	&sha256_ossl_ssse3_impl,
 	&sha256_ossl_avx_impl,
 	&sha256_ossl_avx2_impl,
@@ -432,6 +433,7 @@ static const sha2_impl_ops_t *sha512_impls[] = {
 	&sha512_intel_avx_impl,
 	&sha512_intel_avx2_impl,
 
+	&sha512_ossl_x64_impl,
 	&sha512_ossl_avx_impl,
 	&sha512_ossl_avx2_impl,
 #endif

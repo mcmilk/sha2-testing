@@ -80,6 +80,7 @@ extern const sha2_impl_ops_t sha256_intel_ssse3_impl;
 extern const sha2_impl_ops_t sha256_intel_avx_impl;
 extern const sha2_impl_ops_t sha256_intel_ni_impl;
 
+extern const sha2_impl_ops_t sha256_ossl_x64_impl;
 extern const sha2_impl_ops_t sha256_ossl_ssse3_impl;
 extern const sha2_impl_ops_t sha256_ossl_avx_impl;
 extern const sha2_impl_ops_t sha256_ossl_avx2_impl;
@@ -91,6 +92,7 @@ extern const sha2_impl_ops_t sha512_intel_ssse3_impl;
 extern const sha2_impl_ops_t sha512_intel_avx_impl;
 extern const sha2_impl_ops_t sha512_intel_avx2_impl;
 
+extern const sha2_impl_ops_t sha512_ossl_x64_impl;
 extern const sha2_impl_ops_t sha512_ossl_avx_impl;
 extern const sha2_impl_ops_t sha512_ossl_avx2_impl;
 #endif

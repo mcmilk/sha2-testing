@@ -431,6 +431,25 @@ const sha2_impl_ops_t sha256_intel_avx_impl = {
 };
 
 /*************************************************************************/
+extern void sha256_block_data_order(uint32_t state[8], const void *data, size_t blks);
+static int ossl_SHA256_Init_x64(void **ctx)
+{
+	sha256_ctx *c = malloc(sizeof(sha256_ctx));
+	if (!c) exit(111);
+	sha256_init_tf(c, sha256_block_data_order);
+	*ctx = c;
+	return 0;
+}
+
+const sha2_impl_ops_t sha256_ossl_x64_impl = {
+	.init = ossl_SHA256_Init_x64,
+	.update = cppcrypto_SHA256_Update,
+	.final = cppcrypto_SHA256_Final,
+	.digest_len = 32,
+	.name = "sha256-ossl-x64"
+};
+
+/*************************************************************************/
 extern void sha256_block_data_order_ssse3(uint32_t state[8], const void *data, size_t blks);
 static int ossl_SHA256_Init_ssse3(void **ctx)
 {
@@ -548,6 +567,25 @@ const sha2_impl_ops_t sha512_intel_ssse3_impl = {
 	.digest_len = 64,
 	.is_supported = have_ssse3,
 	.name = "sha512-intel-ssse3"
+};
+
+/*************************************************************************/
+extern void sha512_block_data_order(uint64_t state[8], const void *data, size_t blks);
+static int cppcrypto_SHA512_Init_x64(void **ctx)
+{
+	sha512_ctx *c = malloc(sizeof(sha512_ctx));
+	if (!c) exit(111);
+	sha512_init_tf(c, sha512_block_data_order);
+	*ctx = c;
+	return 0;
+}
+
+const sha2_impl_ops_t sha512_ossl_x64_impl = {
+	.init = cppcrypto_SHA512_Init_x64,
+	.update = cppcrypto_SHA512_Update,
+	.final = cppcrypto_SHA512_Final,
+	.digest_len = 64,
+	.name = "sha512-ossl-x64"
 };
 
 /*************************************************************************/
