@@ -11,6 +11,9 @@ CC	= gcc
 
 CFLAGS	= -Os -Wall
 
+# work around for openssl - direct use of SHA2() functions
+CFLAGS  += -Wno-deprecated-declarations 
+
 CIFRA	= cifra/blockwise.o cifra/sha256.o cifra/sha512.o
 SBASE	= sbase/sha256.o sbase/sha512-256.o sbase/sha512.o
 FREEBSD	= freebsd/sha256c.o freebsd/sha512c.o
@@ -57,6 +60,12 @@ OBJS	+= openssl/sha256-x86_64.o
 OBJS	+= openssl/sha512-x86_64.o
 endif
 
+ifeq (armv7l,$(HOSTTYPE))
+OBJS	+= openssl/sha256-armv7.o
+OBJS	+= openssl/sha512-armv7.o
+ASFLAGS	+= -march=armv7-a -mfpu=neon
+endif
+
 ifeq (aarch64,$(HOSTTYPE))
 OBJS	+= cppcrypto/sha256-aarch64.o
 OBJS	+= openssl/sha256-armv8.o
@@ -67,20 +76,20 @@ endif
 ifeq (ppc64,$(HOSTTYPE))
 OBJS	+= cppcrypto/sha256-ppc64.o
 OBJS	+= cppcrypto/sha512-ppc64.o
+OBJS	+= openssl/sha256-p8.o
 OBJS	+= openssl/sha256-ppc.o
+OBJS	+= openssl/sha512-p8.o
 OBJS	+= openssl/sha512-ppc.o
-OBJS	+= openssl/sha256p8-ppc.o
-OBJS	+= openssl/sha512p8-ppc.o
 #CFLAGS	+= -mcpu=power8
 endif
 
 ifeq (ppc64le,$(HOSTTYPE))
 OBJS	+= cppcrypto/sha256-ppc64le.o
 OBJS	+= cppcrypto/sha512-ppc64le.o
-OBJS	+= openssl/sha256-ppc64le.o
-OBJS	+= openssl/sha512-ppc64le.o
-OBJS	+= openssl/sha256p8-ppc64le.o
-OBJS	+= openssl/sha512p8-ppc64le.o
+OBJS	+= openssl/sha256-p8.o
+OBJS	+= openssl/sha256-ppc.o
+OBJS	+= openssl/sha512-p8.o
+OBJS	+= openssl/sha512-ppc.o
 #CFLAGS	+= -mcpu=power8
 endif
 

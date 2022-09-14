@@ -88,10 +88,10 @@
 	.word	3204031479
 	.word	3329325298
 	.text
-	.globl	sha256_noloader_armv8_ce
+	.globl	sha256_noloader_armv8
 	.p2align	2
-	.type	sha256_noloader_armv8_ce,@function
-sha256_noloader_armv8_ce:
+	.type	sha256_noloader_armv8,@function
+sha256_noloader_armv8:
 	str	d10, [sp, #-32]!
 	stp	d9, d8, [sp, #16]
 	ldp	q0, q1, [x0]
@@ -235,5 +235,5 @@ sha256_noloader_armv8_ce:
 	ldr	d10, [sp], #32
 	ret
 .Lfunc_end0:
-	.size	sha256_noloader_armv8_ce, .Lfunc_end0-sha256_noloader_armv8_ce
+	.size	sha256_noloader_armv8, .Lfunc_end0-sha256_noloader_armv8
 	.section	".note.GNU-stack","",@progbits

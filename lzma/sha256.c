@@ -76,8 +76,11 @@ transform(uint32_t state[static 8], const uint32_t data[static 16])
 {
     uint32_t W[16];
     uint32_t T[8];
+
     // Copy state[] to working vars.
+    memset(W, 0, sizeof (W));
     memcpy(T, state, sizeof(T));
+
     // 64 operations, partially loop unrolled
     unsigned int j;
     for (j = 0; j < 64; j += 16) {

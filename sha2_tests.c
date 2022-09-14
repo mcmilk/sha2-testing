@@ -187,10 +187,10 @@ static size_t fmt_hexdump(unsigned char *dest, const unsigned char *src,
 	return (written);
 }
 
-void check_result(const char *ref, const char *res, int len)
+void check_result(const char *ref, const char *res, int len, const char *name)
 {
 	if (strncmp(ref, res, len) != 0) {
-		printf("Wrong Result! %s != %s\n", ref, res);
+		printf("Wrong Result for %s! [%s != ref:%s]\n", name, res, ref);
 		exit(1);
 	}
 }
@@ -239,19 +239,19 @@ void test_with(const sha2_impl_ops_t * sha2, int id)
 		switch (id) {
 		case ID_SHA256:
 			check_result(cur->hash_sha256, (const char*)result,
-				     sha2->digest_len);
+				     sha2->digest_len, sha2->name);
 			if (opt_verbose)
 				printf("HASH-ref:  %s\n", cur->hash_sha256);
 			break;
 		case ID_SHA512_256:
 			check_result(cur->hash_sha512_256, (const char*)result,
-				     sha2->digest_len);
+				     sha2->digest_len, sha2->name);
 			if (opt_verbose)
 				printf("HASH-ref:  %s\n", cur->hash_sha512_256);
 			break;
 		case ID_SHA512:
 			check_result(cur->hash_sha512, (const char*)result,
-				     sha2->digest_len);
+				     sha2->digest_len, sha2->name);
 			if (opt_verbose)
 				printf("HASH-ref:  %s\n", cur->hash_sha512);
 			break;
@@ -378,9 +378,15 @@ static const sha2_impl_ops_t *sha256_impls[] = {
 	&sha256_bsd_impl,
 	&sha256_cppcrypto_impl,
 #if defined(__aarch64__)
+	&sha256_ossl_data_order_impl,
 	&sha256_ossl_neon_impl,
-	&sha256_ossl_armv8_ce_impl,
-	&sha256_noloder_armv8_ce_impl,
+	&sha256_ossl_armv8_impl,
+	&sha256_noloder_armv8_impl,
+#endif
+#if defined(__arm__)
+	&sha256_ossl_data_order_impl,
+	&sha256_ossl_neon_impl,
+	&sha256_ossl_armv8_impl,
 #endif
 #if defined(__PPC64__)
 	&sha256_ossl_ppc64_impl,
@@ -406,9 +412,6 @@ static const sha2_impl_ops_t *sha512_256_impls[] = {
 	&sha512_256_sbase_impl,
 	&sha512_256_bsd_impl,
 	&sha512_256_cppcrypto_impl,
-#if defined(__aarch64__)
-	&sha512_256_ossl_armv8_ce_impl,
-#endif
 #if defined(__x86_64)
 	&sha512t_ossl_avx2_impl,
 #endif
@@ -421,7 +424,12 @@ static const sha2_impl_ops_t *sha512_impls[] = {
 	&sha512_bsd_impl,
 	&sha512_cppcrypto_impl,
 #if defined(__aarch64__)
-	&sha512_ossl_armv8_ce_impl,
+	&sha512_ossl_data_order_impl,
+	&sha512_ossl_armv8_impl,
+#endif
+#if defined(__arm__)
+	&sha512_ossl_data_order_impl,
+	&sha512_ossl_neon_impl,
 #endif
 #if defined(__PPC64__)
 	&sha512_ossl_ppc64_impl,

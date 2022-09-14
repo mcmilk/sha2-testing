@@ -102,16 +102,16 @@ const sha2_impl_ops_t sha512_cppcrypto_impl = {
 	.name = "sha512-cppcrypto"
 };
 
-#if defined(__aarch64__)
+#if defined(__aarch64__) || defined(__arm__)
 #include <sys/auxv.h>
 #include <asm/hwcap.h>
 
 int have_neon(void)
 {
-#if defined HWCAP_FP
+#if defined HWCAP_NEON
+    return getauxval(AT_HWCAP) & HWCAP_NEON;
+#elif defined HWCAP_FP
     return getauxval(AT_HWCAP) & HWCAP_FP;
-#elif defined HWCAP2_FP
-    return getauxval(AT_HWCAP2) & HWCAP2_FP;
 #else
     return 0;
 #endif
@@ -140,24 +140,46 @@ int have_sha512_ce(void)
 }
 
 /*************************************************************************/
-extern void sha256_noloader_armv8_ce(uint32_t s[8], const void *data, size_t blks);
-static int noloader_SHA256_Init_armv8_ce(void **ctx)
+#if defined(__aarch64__)
+extern void sha256_noloader_armv8(uint32_t s[8], const void *data, size_t blks);
+static int noloader_SHA256_Init_armv8(void **ctx)
 {
 	sha256_ctx *c = malloc(sizeof(sha256_ctx));
 	if (!c) exit(111);
-	sha256_init_tf(c, sha256_noloader_armv8_ce);
+	sha256_init_tf(c, sha256_noloader_armv8);
 	*ctx = c;
 	return 0;
 }
 
-const sha2_impl_ops_t sha256_noloder_armv8_ce_impl = {
-	.init = noloader_SHA256_Init_armv8_ce,
+const sha2_impl_ops_t sha256_noloder_armv8_impl = {
+	.init = noloader_SHA256_Init_armv8,
 	.update = cppcrypto_SHA256_Update,
 	.final = cppcrypto_SHA256_Final,
 	.digest_len = 32,
 	.is_supported = have_sha256_ce,
 	.name = "sha256-noloader-armv8"
 };
+
+/*************************************************************************/
+extern void sha512_block_armv8(uint64_t s[8], const void *data, size_t blks);
+static int ossl_SHA512_Init_armv8(void **ctx)
+{
+	sha512_ctx *c = malloc(sizeof(sha256_ctx));
+	if (!c) exit(111);
+	sha512_init_tf(c, sha512_block_armv8);
+	*ctx = c;
+	return 0;
+}
+
+const sha2_impl_ops_t sha512_ossl_armv8_impl = {
+	.init = ossl_SHA512_Init_armv8,
+	.update = cppcrypto_SHA512_Update,
+	.final = cppcrypto_SHA512_Final,
+	.digest_len = 64,
+	.is_supported = have_sha512_ce,
+	.name = "sha512-ossl-armv8"
+};
+#endif
 
 /*************************************************************************/
 extern void sha256_block_neon(uint32_t s[8], const void *data, size_t blks);
@@ -180,62 +202,82 @@ const sha2_impl_ops_t sha256_ossl_neon_impl = {
 };
 
 /*************************************************************************/
-extern void sha256_block_armv8_ce(uint32_t s[8], const void *data, size_t blks);
-static int ossl_SHA256_Init_armv8_ce(void **ctx)
+extern void sha256_block_armv8(uint32_t s[8], const void *data, size_t blks);
+static int ossl_SHA256_Init_armv8(void **ctx)
 {
 	sha256_ctx *c = malloc(sizeof(sha256_ctx));
 	if (!c) exit(111);
-	sha256_init_tf(c, sha256_block_armv8_ce);
+	sha256_init_tf(c, sha256_block_armv8);
 	*ctx = c;
 	return 0;
 }
 
-const sha2_impl_ops_t sha256_ossl_armv8_ce_impl = {
-	.init = ossl_SHA256_Init_armv8_ce,
+const sha2_impl_ops_t sha256_ossl_armv8_impl = {
+	.init = ossl_SHA256_Init_armv8,
 	.update = cppcrypto_SHA256_Update,
 	.final = cppcrypto_SHA256_Final,
 	.digest_len = 32,
 	.is_supported = have_sha256_ce,
-	.name = "sha256-ossl-armv8-ce"
+	.name = "sha256-ossl-armv8"
 };
 
 /*************************************************************************/
-extern void sha512_block_armv8_ce(uint64_t s[8], const void *data, size_t blks);
-static int ossl_SHA512_256_Init_armv8_ce(void **ctx)
+extern void sha256_block_data_order(uint32_t s[8], const void *data, size_t blks);
+static int ossl_SHA256_Init_block_order(void **ctx)
 {
-	sha512_ctx *c = malloc(sizeof(sha256_ctx));
+	sha256_ctx *c = malloc(sizeof(sha256_ctx));
 	if (!c) exit(111);
-	sha512_256_init_tf(c, sha512_block_armv8_ce);
+	sha256_init_tf(c, sha256_block_data_order);
 	*ctx = c;
 	return 0;
 }
 
-const sha2_impl_ops_t sha512_256_ossl_armv8_ce_impl = {
-	.init = ossl_SHA512_256_Init_armv8_ce,
-	.update = cppcrypto_SHA512_256_Update,
-	.final = cppcrypto_SHA512_256_Final,
+const sha2_impl_ops_t sha256_ossl_data_order_impl = {
+	.init = ossl_SHA256_Init_block_order,
+	.update = cppcrypto_SHA256_Update,
+	.final = cppcrypto_SHA256_Final,
 	.digest_len = 32,
-	.is_supported = have_sha512_ce,
-	.name = "sha512_256-ossl-armv8-ce"
+	.name = "sha256-ossl-armv7"
 };
 
 /*************************************************************************/
-static int ossl_SHA512_Init_armv8_ce(void **ctx)
+#if !defined(__aarch64__)
+extern void sha512_block_neon(uint64_t s[8], const void *data, size_t blks);
+static int ossl_SHA512_Init_neon(void **ctx)
 {
 	sha512_ctx *c = malloc(sizeof(sha256_ctx));
 	if (!c) exit(111);
-	sha512_init_tf(c, sha512_block_armv8_ce);
+	sha512_init_tf(c, sha512_block_neon);
 	*ctx = c;
 	return 0;
 }
 
-const sha2_impl_ops_t sha512_ossl_armv8_ce_impl = {
-	.init = ossl_SHA512_Init_armv8_ce,
+const sha2_impl_ops_t sha512_ossl_neon_impl = {
+	.init = ossl_SHA512_Init_neon,
 	.update = cppcrypto_SHA512_Update,
 	.final = cppcrypto_SHA512_Final,
 	.digest_len = 64,
-	.is_supported = have_sha512_ce,
-	.name = "sha512-ossl-armv8-ce"
+	.name = "sha512-ossl-neon"
+};
+#endif
+
+/*************************************************************************/
+extern void sha512_block_data_order(uint64_t s[8], const void *data, size_t blks);
+static int ossl_SHA512_Init_block_order(void **ctx)
+{
+	sha512_ctx *c = malloc(sizeof(sha256_ctx));
+	if (!c) exit(111);
+	sha512_init_tf(c, sha512_block_data_order);
+	*ctx = c;
+	return 0;
+}
+
+const sha2_impl_ops_t sha512_ossl_data_order_impl = {
+	.init = ossl_SHA512_Init_block_order,
+	.update = cppcrypto_SHA512_Update,
+	.final = cppcrypto_SHA512_Final,
+	.digest_len = 64,
+	.name = "sha512-ossl-armv7"
 };
 #endif
 

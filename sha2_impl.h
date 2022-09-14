@@ -39,11 +39,23 @@ typedef struct sha2_impl_ops {
 } sha2_impl_ops_t;
 
 #if defined(__aarch64__)
-extern const sha2_impl_ops_t sha256_noloder_armv8_ce_impl;
+extern const sha2_impl_ops_t sha256_noloder_armv8_impl;
+
+extern const sha2_impl_ops_t sha256_ossl_data_order_impl;
 extern const sha2_impl_ops_t sha256_ossl_neon_impl;
-extern const sha2_impl_ops_t sha256_ossl_armv8_ce_impl;
-extern const sha2_impl_ops_t sha512_256_ossl_armv8_ce_impl;
-extern const sha2_impl_ops_t sha512_ossl_armv8_ce_impl;
+extern const sha2_impl_ops_t sha256_ossl_armv8_impl;
+
+extern const sha2_impl_ops_t sha512_ossl_data_order_impl;
+extern const sha2_impl_ops_t sha512_ossl_armv8_impl;
+#endif
+
+#if defined(__arm__)
+extern const sha2_impl_ops_t sha256_ossl_data_order_impl;
+extern const sha2_impl_ops_t sha256_ossl_neon_impl;
+extern const sha2_impl_ops_t sha256_ossl_armv8_impl;
+
+extern const sha2_impl_ops_t sha512_ossl_data_order_impl;
+extern const sha2_impl_ops_t sha512_ossl_neon_impl;
 #endif
 
 #if defined(__PPC64__)

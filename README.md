@@ -160,29 +160,34 @@ sha512-openssl              411     416     398     423     402     421     402
 ```
 
 ```
-Linux 5.17.0-rc7-asahi-g4a4f4ec03834 #1 SMP PREEMPT Sat Mar 12 18:16:45 UTC 2022 GNU/Linux
+Linux 5.19.0-asahi-00002-g5528b48e9700 #1 SMP Fri Sep 2 10:36:11 CEST 2022 aarch64 GNU/Linux
 Architecture: aarch64 - Apple M1 Little Endian
 Flags:        fp asimd aes sha1 sha2 crc32 cpuid sha3 sha512 ...
 CC=gcc CFLAGS=-Os
 implementation               1k      4k     16k     64k    256k      1m      4m
-sha256-cifra                 69      89      95     130     186     244     255
-sha256-sbase                160     160     159     158     158     158     159
-sha256-tomcrypt             160     160     158     159     158     158     159
-sha256-lzma                 273     276     275     276     275     275     275
-sha256-bsd                  292     292     291     291     292     291     292
-sha256-cppcrypto            285     286     285     285     285     285     284
-sha256-cppcrypto-armv8     1946    1957    1959    1959    1958    1956    1955
-sha256-openssl             2180    2192    2195    2195    2195    2197    2196
+sha256-cifra                 69      74      89     126     187     233     255
+sha256-sbase                160     160     159     159     158     158     159
+sha256-tomcrypt             160     160     159     159     158     158     159
+sha256-lzma                 276     276     275     275     275     275     275
+sha256-bsd                  297     296     296     296     295     296     296
+sha256-cppcrypto            287     287     287     287     287     287     287
+sha256-ossl-armv7           349     349     349     349     349     349     349
+sha256-ossl-neon            356     357     357     357     357     357     357
+sha256-ossl-armv8          2179    2188    2195    2196    2196    2196    2196
+sha256-noloader-armv8      1927    1935    1937    1939    1940    1939    1939
+sha256-openssl             2181    2192    2195    2196    2195    2196    2196
 
-sha512_256-sbase            273     273     265     267     266     267     269
-sha512_256-bsd              468     469     469     468     468     468     468
-sha512_256-cppcrypto        454     456     457     455     456     455     455
+sha512_256-sbase            273     274     266     265     265     267     270
+sha512_256-bsd              475     475     474     475     475     475     476
+sha512_256-cppcrypto        459     460     460     460     460     460     460
 
-sha512-cifra                444     445     443     442     442     440     443
-sha512-sbase                273     273     264     267     265     266     268
-sha512-bsd                  469     470     469     466     468     468     469
-sha512-cppcrypto            455     456     456     456     456     455     456
-sha512-openssl             1280    1284    1285    1285    1285    1284    1282
+sha512-cifra                446     446     444     442     441     441     444
+sha512-sbase                273     274     265     264     265     266     269
+sha512-bsd                  475     476     476     475     475     475     475
+sha512-cppcrypto            459     460     456     460     460     459     460
+sha512-ossl-armv7           555     556     555     555     555     555     555
+sha512-ossl-armv8          1279    1284    1285    1285    1285    1286    1285
+sha512-openssl             1280    1284    1286    1286    1285    1285    1285
 ```
 
 ```
@@ -277,24 +282,28 @@ Architecture: aarch64 - X-Gene Little Endian (3300 MHz)
 Flags:        fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
 CC=gcc CFLAGS=-Os
 implementation               1k      4k     16k     64k    256k      1m      4m
-sha256-cifra                 97      97      97      97      97      97      97
-sha256-sbase                108     108     108     108     108     108     108
-sha256-tomcrypt             108     108     108     108     108     108     108
+sha256-cifra                100     100     100     100     100     100     100
+sha256-sbase                107     108     108     108     108     108     108
+sha256-tomcrypt             111     111     111     111     111     111     111
 sha256-lzma                 136     136     136     136     136     136     136
-sha256-bsd                  156     156     157     157     157     157     157
-sha256-cppcrypto            150     150     150     150     150     150     150
-sha256-cppcrypto-armv8   ** 677     686     688     689     689     689     689
-sha256-openssl              671     676     677     677     676     677     678
+sha256-bsd                  157     157     157     157     157     157     157
+sha256-cppcrypto            150     151     151     151     151     151     151
+sha256-ossl-armv7           168     168     169     169     169     169     169
+sha256-ossl-neon            209     211     211     211     211     211     211
+sha256-ossl-armv8           670     674     677     677     678     678     678
+sha256-noloader-armv8       661     672     674     675     675     675     675
+sha256-openssl              671     676     677     677     677     676     678
 
-sha512_256-sbase            163     164     164     164     164     164     164
-sha512_256-bsd              249     250     251     251     251     251     251
-sha512_256-cppcrypto        239     241     242     241     241     241     241
+sha512_256-sbase            161     162     162     162     162     162     162
+sha512_256-bsd              246     248     248     248     248     248     248
+sha512_256-cppcrypto        238     240     240     240     240     240     240
 
-sha512-cifra                155     156     156     157     157     157     157
-sha512-sbase                164     164     164     164     164     164     164
-sha512-bsd                  249     251     251     250     251     251     251
-sha512-cppcrypto            240     241     242     241     241     241     241
-sha512-openssl              264     265     266     266     266     266     266
+sha512-cifra                156     156     156     157     157     156     156
+sha512-sbase                162     161     162     162     162     162     162
+sha512-bsd                  246     248     248     248     248     248     248
+sha512-cppcrypto            238     240     240     240     240     240     240
+sha512-ossl-armv7           265     266     267     267     267     267     267
+sha512-openssl              265     266     266     266     266     266     266
 ```
 
 ```
