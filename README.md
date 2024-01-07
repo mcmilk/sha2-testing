@@ -191,6 +191,36 @@ sha512-openssl             1280    1284    1286    1286    1285    1285    1285
 ```
 
 ```
+Linux 5.14.0-362.13.1.el9_3.aarch64 #1 SMP aarch64 GNU/Linux
+Architecture: aarch64 - ARM Neoverse-N1
+Flags:        fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp
+Flags:        asimdhp cpuid asimdrdm lrcpc dcpop asimddp ssbs
+implementation               1k      4k     16k     64k    256k      1m      4m
+sha256-cifra                122     120     124     120     121     171     177
+sha256-sbase                195     195     192     193     192     191     191
+sha256-tomcrypt             193     194     190     191     190     185     192
+sha256-lzma                 237     237     236     235     236     237     236
+sha256-bsd                  260     260     257     258     259     259     258
+sha256-cppcrypto            267     268     265     265     267     265     265
+sha256-ossl-armv7           298     298     298     295     294     291     293
+sha256-ossl-neon            410     413     406     412     410     410     410
+sha256-ossl-armv8          1802    1813    1807    1802    1776    1819    1827
+sha256-noloader-armv8      1379    1390    1393    1390    1395    1399    1394
+sha256-openssl             1807    1819    1819    1812    1802    1813    1808
+
+sha512_256-sbase            298     303     300     300     299     297     297
+sha512_256-bsd              401     409     407     406     403     408     405
+sha512_256-cppcrypto        423     430     429     424     425     426     427
+
+sha512-cifra                284     285     282     282     282     279     279
+sha512-sbase                302     304     296     297     293     297     297
+sha512-bsd                  408     407     407     408     409     397     406
+sha512-cppcrypto            428     430     429     430     427     423     427
+sha512-ossl-armv7           471     470     465     467     467     462     466
+sha512-openssl              469     466     467     468     463     465     461
+```
+
+```
 Linux 4.18.0-80.7.2.el7.ppc64le #1 SMP ppc64le GNU/Linux
 Architecture: ppc64 - POWER9 2.2 (pvr 004e 1202) - Little Endian
 
